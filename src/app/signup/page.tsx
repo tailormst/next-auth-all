@@ -11,24 +11,26 @@ export default function SignupPage() {
     const [buttonDisabled, setButtonDisabled] = useState(true);
     const [loading, setLoading] = useState(false);
 
+    useEffect(() => {
+        setButtonDisabled(!(user.email.trim() && user.password.trim() && user.username.trim()));
+    }, [user]);
+
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setUser((prev) => ({ ...prev, [e.target.id]: e.target.value }));
+    };
+
     const onSignup = async () => {
         try {
             setLoading(true);
             const response = await axios.post("/api/users/signup", user);
-            console.log("Signup success", response.data);
             toast.success("Signup successful! Please login.");
             router.push("/login");
         } catch (error: any) {
-            console.log("Signup failed", error.message);
-            toast.error(error.message);
+            toast.error(error.response?.data?.error || "Signup failed. Try again.");
         } finally {
             setLoading(false);
         }
     };
-
-    useEffect(() => {
-        setButtonDisabled(!(user.email && user.password && user.username));
-    }, [user]);
 
     return (
         <div className="flex items-center justify-center min-h-screen bg-gray-100">
@@ -39,47 +41,21 @@ export default function SignupPage() {
                 <hr className="my-4" />
 
                 <div className="space-y-4">
-                    <div>
-                        <label htmlFor="username" className="block text-sm font-medium text-gray-700">
-                            Username
-                        </label>
-                        <input
-                            id="username"
-                            type="text"
-                            value={user.username}
-                            onChange={(e) => setUser({ ...user, username: e.target.value })}
-                            placeholder="Enter your username"
-                            className="w-full px-3 py-2 mt-1 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
-                        />
-                    </div>
-
-                    <div>
-                        <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-                            Email
-                        </label>
-                        <input
-                            id="email"
-                            type="email"
-                            value={user.email}
-                            onChange={(e) => setUser({ ...user, email: e.target.value })}
-                            placeholder="Enter your email"
-                            className="w-full px-3 py-2 mt-1 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
-                        />
-                    </div>
-
-                    <div>
-                        <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-                            Password
-                        </label>
-                        <input
-                            id="password"
-                            type="password"
-                            value={user.password}
-                            onChange={(e) => setUser({ ...user, password: e.target.value })}
-                            placeholder="Enter your password"
-                            className="w-full px-3 py-2 mt-1 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
-                        />
-                    </div>
+                    {["username", "email", "password"].map((field) => (
+                        <div key={field}>
+                            <label htmlFor={field} className="block text-sm font-medium text-gray-700">
+                                {field.charAt(0).toUpperCase() + field.slice(1)}
+                            </label>
+                            <input
+                                id={field}
+                                type={field === "password" ? "password" : "text"}
+                                value={user[field as keyof typeof user]}
+                                onChange={handleInputChange}
+                                placeholder={`Enter your ${field}`}
+                                className="w-full px-3 py-2 mt-1 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                            />
+                        </div>
+                    ))}
 
                     <button
                         onClick={onSignup}

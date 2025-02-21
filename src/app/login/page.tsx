@@ -8,26 +8,26 @@ import { toast } from "react-hot-toast";
 export default function LoginPage() {
     const router = useRouter();
     const [user, setUser] = useState({ email: "", password: "" });
-    const [buttonDisabled, setButtonDisabled] = useState(false);
+    const [buttonDisabled, setButtonDisabled] = useState(true);
     const [loading, setLoading] = useState(false);
 
     const onLogin = async () => {
         try {
             setLoading(true);
             const response = await axios.post("/api/users/login", user);
-            console.log("Login success", response.data);
+            console.log("Login success:", response.data);
             toast.success("Login successful!");
             router.push("/profile");
-        } catch (error: any) {
-            console.log("Login failed", error.message);
-            toast.error(error.message);
+        } catch (error: unknown) {
+            console.error("Login failed:", error);
+            toast.error(error instanceof Error ? error.message : "Something went wrong");
         } finally {
             setLoading(false);
         }
     };
 
     useEffect(() => {
-        setButtonDisabled(!(user.email && user.password));
+        setButtonDisabled(!(user.email.trim() && user.password.trim()));
     }, [user]);
 
     return (
@@ -69,7 +69,7 @@ export default function LoginPage() {
 
                     <button
                         onClick={onLogin}
-                        disabled={buttonDisabled}
+                        disabled={buttonDisabled || loading}
                         className={`w-full px-4 py-2 font-semibold text-white rounded-lg transition ${
                             buttonDisabled
                                 ? "bg-gray-400 cursor-not-allowed"

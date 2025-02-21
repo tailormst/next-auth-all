@@ -1,14 +1,21 @@
 import { NextRequest } from "next/server";
-import jwt from "jsonwebtoken"
+import jwt from "jsonwebtoken";
 
-export const getDataFromToken = (request: NextRequest) => {
+export const getDataFromToken = (request: NextRequest): string | null => {
     try {
-        const token = request.cookies.get("token")?.value || "" // encoded
+        const token = request.cookies.get("token")?.value || ""; // Encoded token
 
-        const decodedToken: any = jwt.verify(token, process.env.TOKEN_SECRET!)
+        if (!token) {
+            throw new Error("Token not found");
+        }
+
+        const decodedToken = jwt.verify(token, process.env.TOKEN_SECRET!) as { id: string };
 
         return decodedToken.id;
-    } catch (error: any) {
-        throw new Error(error.message);
+    } catch (error: unknown) {
+        if (error instanceof Error) {
+            throw new Error(error.message);
+        }
+        throw new Error("An unexpected error occurred while verifying token.");
     }
-}
+};

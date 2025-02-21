@@ -1,7 +1,5 @@
 import { connect } from "@/dbConfig/dbConfig";
 import User from "@/models/userModel";
-import { error } from "console";
-import { verify } from "crypto";
 import { NextRequest, NextResponse } from "next/server";
 
 connect()
@@ -12,16 +10,16 @@ export async function POST(request: NextRequest) {
         const { token } = reqBody;
         console.log(token);
         
-
         const user = await User.findOne({
             verifyToken: token,
-            verifyTokenExpiry: {$gt: Date.now()},
-        })
+            verifyTokenExpiry: { $gt: Date.now() },
+        });
 
         if (!user) {
-            return NextResponse.json({
-                error: "Invalid Token"},
-                {status: 400})
+            return NextResponse.json(
+                { error: "Invalid Token" },
+                { status: 400 }
+            );
         }
         console.log(user);
         
@@ -33,8 +31,12 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({
             message: "User Successfully Verified",
             success: true,
-        })
-    } catch (error: any) {
-        return NextResponse.json({error: error.message}, {status: 500})
+        });
+
+    } catch (error: unknown) {
+        if (error instanceof Error) {
+            return NextResponse.json({ error: error.message }, { status: 500 });
+        }
+        return NextResponse.json({ error: "An unexpected error occurred" }, { status: 500 });
     }
 }
