@@ -25,10 +25,14 @@ export default function VerifyEmailPage() {
         if (!token) return;
 
         try {
-            await axios.post('/api/users/verifyemail', { token });
+            await axios.post("/api/users/verifyemail", { token });
             setVerified(true);
-        } catch (err: any) {
-            console.error("Verification Error:", err.response?.data || err.message);
+        } catch (error: unknown) {
+            if (error instanceof Error) {
+                console.error("Verification Error:", error.message);
+            } else {
+                console.error("An unexpected error occurred while verifying the token.");
+            }
             setError(true);
         } finally {
             setLoading(false);

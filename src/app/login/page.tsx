@@ -37,7 +37,7 @@ export default function LoginPage() {
                     {loading ? "Processing..." : "Login"}
                 </h1>
                 <hr className="my-4" />
-                
+
                 <div className="space-y-4">
                     <div>
                         <label htmlFor="email" className="block text-sm font-medium text-gray-700">
@@ -70,22 +70,22 @@ export default function LoginPage() {
                     <button
                         onClick={onLogin}
                         disabled={buttonDisabled || loading}
-                        className={`w-full px-4 py-2 font-semibold text-white rounded-lg transition ${
-                            buttonDisabled
+                        className={`w-full px-4 py-2 font-semibold text-white rounded-lg transition ${buttonDisabled
                                 ? "bg-gray-400 cursor-not-allowed"
                                 : "bg-blue-600 hover:bg-blue-700"
-                        }`}
+                            }`}
                     >
                         {loading ? "Logging in..." : "Login"}
                     </button>
                 </div>
 
                 <p className="mt-4 text-center text-sm text-gray-600">
-                    Don't have an account?{" "}
+                    Don&apos;t have an account?{" "}
                     <Link href="/signup" className="text-blue-600 hover:underline">
                         Sign up
                     </Link>
                 </p>
+
             </div>
         </div>
     );

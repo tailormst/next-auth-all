@@ -16,21 +16,26 @@ export default function SignupPage() {
     }, [user]);
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setUser((prev) => ({ ...prev, [e.target.id]: e.target.value }));
+        const { id, value } = e.target;
+        setUser((prev) => ({ ...prev, [id]: value }));
     };
 
     const onSignup = async () => {
         try {
             setLoading(true);
-            const response = await axios.post("/api/users/signup", user);
+            await axios.post("/api/users/signup", user); // Removed the 'response' variable
             toast.success("Signup successful! Please login.");
             router.push("/login");
-        } catch (error: any) {
-            toast.error(error.response?.data?.error || "Signup failed. Try again.");
+        } catch (error: unknown) {
+            if (axios.isAxiosError(error)) {
+                toast.error(error.response?.data?.error || "Signup failed. Try again.");
+            } else {
+                toast.error("An unexpected error occurred.");
+            }
         } finally {
             setLoading(false);
         }
-    };
+    };    
 
     return (
         <div className="flex items-center justify-center min-h-screen bg-gray-100">
