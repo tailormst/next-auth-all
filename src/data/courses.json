@@ -1,0 +1,123 @@
+{
+    "courses": [
+        {
+            "id": 1,
+            "name": "C++ Programming",
+            "description": "Learn the fundamentals of C++ programming, including object-oriented programming concepts.",
+            "difficulty": "Beginner",
+            "duration": "6 weeks",
+            "topics": [
+                "Introduction to C++",
+                "Variables and Data Types",
+                "Control Structures",
+                "Functions and Recursion",
+                "OOP - Classes and Objects",
+                "Pointers and Memory Management",
+                "STL - Standard Template Library"
+            ],
+            "resources": {
+                "website": "https://www.learncpp.com/",
+                "documentation": "https://cplusplus.com/doc/tutorial/",
+                "youtube": "https://www.youtube.com/watch?v=vLnPwxZdW4Y"
+            }
+        },
+        {
+            "id": 2,
+            "name": "C Programming",
+            "description": "Introduction to C programming, covering syntax, data types, and basic algorithms.",
+            "difficulty": "Beginner",
+            "duration": "5 weeks",
+            "topics": [
+                "Introduction to C",
+                "Variables and Operators",
+                "Control Flow Statements",
+                "Functions and Arrays",
+                "Pointers and Structures",
+                "File Handling in C"
+            ],
+            "resources": {
+                "website": "https://www.programiz.com/c-programming",
+                "documentation": "https://devdocs.io/c/",
+                "youtube": "https://www.youtube.com/watch?v=KJgsSFOSQv0"
+            }
+        },
+        {
+            "id": 3,
+            "name": "Java Programming",
+            "description": "A complete Java programming course for beginners, covering OOP and real-world applications.",
+            "difficulty": "Intermediate",
+            "duration": "8 weeks",
+            "topics": [
+                "Java Basics",
+                "Control Flow and Loops",
+                "OOP - Classes and Objects",
+                "Exception Handling",
+                "Multithreading",
+                "Collections Framework",
+                "JDBC and Database Connectivity"
+            ],
+            "resources": {
+                "website": "https://www.javatpoint.com/java-tutorial",
+                "documentation": "https://docs.oracle.com/en/java/",
+                "youtube": "https://www.youtube.com/watch?v=eIrMbAQSU34"
+            }
+        },
+        {
+            "id": 4,
+            "name": "HTML & CSS",
+            "description": "Learn how to create beautiful and responsive web pages using HTML and CSS.",
+            "difficulty": "Beginner",
+            "duration": "4 weeks",
+            "topics": [
+                "HTML Basics",
+                "CSS Fundamentals",
+                "Flexbox and Grid Layout",
+                "Responsive Design",
+                "CSS Animations",
+                "Forms and Validation"
+            ],
+            "resources": {
+                "website": "https://developer.mozilla.org/en-US/docs/Learn/HTML",
+                "documentation": "https://developer.mozilla.org/en-US/docs/Web/CSS",
+                "youtube": "https://www.youtube.com/watch?v=G3e-cpL7ofc"
+            }
+        },
+        {
+            "id": 5,
+            "name": "Mathematics",
+            "description": "Fundamentals of mathematics, covering algebra, geometry, calculus, and statistics.",
+            "difficulty": "Intermediate",
+            "duration": "10 weeks",
+            "topics": [
+                "Algebra",
+                "Geometry",
+                "Trigonometry",
+                "Calculus",
+                "Statistics and Probability"
+            ],
+            "resources": {
+                "website": "https://www.khanacademy.org/math",
+                "documentation": "https://mathworld.wolfram.com/",
+                "youtube": "https://www.youtube.com/@khanacademymath"
+            }
+        },
+        {
+            "id": 6,
+            "name": "Science",
+            "description": "A general science course covering physics, chemistry, and biology.",
+            "difficulty": "Beginner",
+            "duration": "12 weeks",
+            "topics": [
+                "Physics - Motion and Forces",
+                "Chemistry - Elements and Compounds",
+                "Biology - Cells and Organisms",
+                "Earth and Space Science"
+            ],
+            "resources": {
+                "website": "https://www.khanacademy.org/science",
+                "documentation": "https://www.nationalgeographic.com/science",
+                "youtube": "https://www.youtube.com/@AsapSCIENCE"
+            }
+        }
+    ]
+}
