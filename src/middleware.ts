@@ -1,34 +1,31 @@
 import { NextRequest, NextResponse } from 'next/server'
-//  There is two part in middleware:
 
-// 1) Logic part
+
 export function middleware(request: NextRequest) {
-    try {
+    const path = request.nextUrl.pathname
 
-        const path = request.nextUrl.pathname;
-        const isPublicPath = path === '/login' || path === '/signup'
+    const isPublicPath = path === '/login' || path === '/signup' || path === '/verifyemail'
 
-        const token = request.cookies.get("token")?.value || ""
+    const token = request.cookies.get('token')?.value || ''
 
-        if (isPublicPath && token) {
-            return NextResponse.redirect(new URL('/', request.nextUrl))
-        }
-
-        if (!isPublicPath && !token) {
-            return NextResponse.redirect(new URL('/login', request.nextUrl))
-        }
-
-    } catch (error: any) {
-        return NextResponse.json({ error: "Error Occurred" })
+    if (isPublicPath && token) {
+        return NextResponse.redirect(new URL('/', request.nextUrl))
     }
+
+    if (!isPublicPath && !token) {
+        return NextResponse.redirect(new URL('/login', request.nextUrl))
+    }
+
 }
 
-// 1) "Matching Paths" part
+
+// See "Matching Paths" below to learn more
 export const config = {
     matcher: [
         '/',
-        '/profile/:path*',
+        '/profile',
         '/login',
         '/signup',
-    ],
+        '/verifyemail'
+    ]
 }
