@@ -1,36 +1,79 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Modern Classroom Authentication with Next.js & TypeScript
 
-## Getting Started
+This project implements a fully authenticated system using Next.js with email verification via Mailtrap and password reset functionalities. Additionally, it features a modern classroom frontend built with Next.js and TypeScript.
 
-First, run the development server:
+## Features
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- User Authentication (Signup, Login, Logout)
+- Email Verification using Mailtrap
+- Forgot Password & Reset Password functionality
+- Modern Classroom Frontend in Next.js & TypeScript
+- User Data Management with MongoDB
+- Toast Notifications for better UX
+- Insert URL Link of Google Sheets for Attendance (Manual)
+
+## Tech Stack
+
+- Next.js (App Router)
+- TypeScript
+- MongoDB & Mongoose (Database)
+- Tailwind CSS (Styling)
+- Mailtrap (Email Sending)
+- React Toast (Notifications)
+- Axios (API Requests)
+- Google Sheets API (Attendance Tracking)
+
+## Installation & Setup
+
+### Clone the repository:
+```sh
+git clone https://github.com/your-repo/modern-classroom.git
+cd modern-classroom
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Install dependencies:
+```sh
+npm install
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Set up environment variables in `.env.local`:
+```env
+MONGODB_URI=your_mongodb_connection_string
+EMAIL_USER=your_mailtrap_username
+EMAIL_PASS=your_mailtrap_password
+TOKEN_SECRET=your_jwt_secret
+DOMAIN=http://localhost:3000
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Start the development server:
+```sh
+npm run dev
+```
 
-## Learn More
+## API Endpoints
 
-To learn more about Next.js, take a look at the following resources:
+### Authentication
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- `POST /api/users/signup` – Register a new user
+- `POST /api/users/login` – Login user
+- `POST /api/users/logout` – Logout user
+- `POST /api/users/verifyemail` – Verify email via token
+- `POST /api/users/forgotpassword` – Request password reset
+- `POST /api/users/resetpassword` – Reset password
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Classroom
 
-## Deploy on Vercel
+- `GET /api/classrooms` – Fetch all classrooms
+- `POST /api/classrooms` – Create a new classroom
+- `GET /api/classrooms/:id` – Get details of a classroom
+- `POST /api/attendance` – Track attendance via Google Sheets
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Contribution
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Consider enhancing the project by adding features such as:
+1) **Advanced Attendance Tracker** – Automate attendance marking with facial recognition or QR codes.
+2) **Assignment Management** – Allow teachers to assign homework and set due dates.
+3) **Student Submission Portal** – Enable students to submit assignments before deadlines.
+4) **Enhanced Frontend UI** – Improve user experience with better design and responsiveness.
+
+Feel free to contribute by opening issues or submitting pull requests. Happy coding! 🚀
