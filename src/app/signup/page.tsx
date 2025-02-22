@@ -21,9 +21,15 @@ export default function SignupPage() {
     };
 
     const onSignup = async () => {
+        if (user.password.length < 8) {
+            toast.error("Password must be at least 8 characters long");
+            alert("Please Enter min 8 length Password !")
+            return;
+        }
+    
         try {
             setLoading(true);
-            await axios.post("/api/users/signup", user); // Removed the 'response' variable
+            await axios.post("/api/users/signup", user);
             toast.success("Signup successful! Please login.");
             router.push("/login");
         } catch (error: unknown) {
@@ -35,7 +41,8 @@ export default function SignupPage() {
         } finally {
             setLoading(false);
         }
-    };    
+    };
+    
 
     return (
         <div className="flex items-center justify-center min-h-screen bg-gray-100">

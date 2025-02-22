@@ -20,6 +20,10 @@ export function middleware(request: NextRequest) {
         }
     }
 
+    if (token && isVerified && path === '/verifyemail') {
+        return NextResponse.redirect(new URL("/dashboard", request.nextUrl)); // Verified users go to dashboard
+    }
+
     // Redirect signup users to login
     if (path === "/signup" && token) {
         return NextResponse.redirect(new URL("/login", request.nextUrl));
