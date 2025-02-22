@@ -3,12 +3,15 @@
 import axios from "axios";
 import Link from "next/link";
 import React, { useEffect, useState, useCallback } from "react";
+import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 
 export default function VerifyEmailPage() {
     const [token, setToken] = useState("");
     const [verified, setVerified] = useState(false);
     const [error, setError] = useState(false);
     const [loading, setLoading] = useState(true);
+    const router = useRouter();
 
     useEffect(() => {
         const urlParams = new URLSearchParams(window.location.search);
@@ -43,6 +46,22 @@ export default function VerifyEmailPage() {
         verifyUserEmail();
     }, [verifyUserEmail]);
 
+    const logout = async () => {
+        try {
+            await axios.get("/api/users/logout");
+            toast.success("Logout successful");
+            router.push("/login");
+        } catch (error: any) {
+            console.log(error.message);
+            toast.error(error.message);
+        }
+    };
+    const goDash = () => {
+        console.log("Navigating to Dashboard...");
+        router.push("/dashboard");
+    };
+    
+
     return (
         <div className="flex flex-col items-center justify-center min-h-screen py-4">
             <h1 className="text-4xl font-semibold">Verify Email</h1>
@@ -53,14 +72,17 @@ export default function VerifyEmailPage() {
                 <h2 className="mt-4 p-2 bg-orange-500 text-black rounded-lg">{token}</h2>
             )}
 
-            {!loading && verified && (
                 <div className="mt-6 text-center">
                     <h2 className="text-2xl text-green-600 font-semibold">Email Verified!</h2>
-                    <Link href="/login" className="block mt-4 text-blue-600 hover:underline">
-                        Login Here
-                    </Link>
+                    <button
+                        onClick={logout}
+                        className="mt-4 bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition duration-300"
+                    >Logout</button>
+                    <button onClick={goDash} className="block mt-4 bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition duration-300">
+                        Go to Dashboard
+                    </button>
                 </div>
-            )}
+            
 
             {!loading && error && (
                 <h2 className="mt-6 p-3 bg-red-500 text-white rounded-lg">

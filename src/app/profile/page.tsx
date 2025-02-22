@@ -1,83 +1,91 @@
 "use client";
-import axios from "axios";
-import Link from "next/link";
+
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
-import toast from "react-hot-toast";
+import axios from "axios";
 
-export default function ProfilePage() {
+export default function Profile() {
+    const [role, setRole] = useState("");
+    const [institution, setInstitution] = useState("");
+    const [isVerified, setIsVerified] = useState(false);
     const router = useRouter();
-    const [data, setData] = useState<string | null>(null);
-    const [loading, setLoading] = useState(false);
-    const [fetchingUser, setFetchingUser] = useState(false);
 
-    const getUserDetails = async () => {
-        try {
-            setFetchingUser(true);
-            const response = await axios.get("/api/users/me");
-            console.log("User Data:", response.data);
-            setData(response.data.data._id);
-            toast.success("User data fetched successfully!");
-        } catch (error: unknown) {
-            console.error("Failed to fetch user:", error);
-            toast.error("Failed to fetch user details.");
-        } finally {
-            setFetchingUser(false);
-        }
-    };
+    useEffect(() => {
+        const fetchUserData = async () => {
+            try {
+                const response = await axios.get("/api/users/me"); 
+                setIsVerified(response.data.isVerified);
+            } catch (error) {
+                console.error("Error fetching user data:", error);
+            }
+        };
 
-    const logout = async () => {
+        fetchUserData();
+    }, []);
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        
         try {
-            setLoading(true);
-            await axios.get("/api/users/logout");
-            toast.success("Logged out successfully!");
-            router.push("/login");
-        } catch (error: unknown) {
-            console.error("Logout failed:", error);
-            toast.error("Logout failed. Try again.");
-        } finally {
-            setLoading(false);
+            // Send profile data to backend
+            await axios.post("/api/users/updateProfile", { role, institution });
+
+            if (isVerified) {
+                router.push("/dashboard");
+            } else {
+                router.push("/verifyemail");
+            }
+        } catch (error) {
+            console.error("Error updating profile:", error);
         }
     };
 
     return (
-        <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-6">
-            <div className="w-full max-w-lg p-6 bg-white rounded-2xl shadow-lg text-center">
-                <h1 className="text-3xl font-semibold text-gray-800">Profile Page</h1>
-                <hr className="my-4" />
-                
-                <h2 className="text-lg text-gray-700">
-                    {data ? (
-                        <Link href={`/profile/${data}`} className="text-blue-600 hover:underline">
-                            {data}
-                        </Link>
-                    ) : (
-                        "No data available"
-                    )}
-                </h2>
+        <div className="min-h-screen flex items-center justify-center bg-gray-100">
+            <form 
+                onSubmit={handleSubmit} 
+                className="bg-white p-8 rounded-lg shadow-md w-full max-w-md"
+            >
+                <h2 className="text-2xl font-bold mb-6 text-center">Complete Your Profile</h2>
 
-                <div className="mt-6 space-y-4">
-                    <button
-                        onClick={getUserDetails}
-                        disabled={fetchingUser}
-                        className={`w-full px-4 py-2 font-semibold text-white rounded-lg transition ${
-                            fetchingUser ? "bg-gray-400 cursor-not-allowed" : "bg-green-600 hover:bg-green-700"
-                        }`}
+                <div className="mb-4">
+                    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="role">
+                        Role
+                    </label>
+                    <select
+                        id="role"
+                        value={role}
+                        onChange={(e) => setRole(e.target.value)}
+                        className="w-full px-3 py-2 border rounded-md"
+                        required
                     >
-                        {fetchingUser ? "Fetching..." : "Get User Details"}
-                    </button>
-
-                    <button
-                        onClick={logout}
-                        disabled={loading}
-                        className={`w-full px-4 py-2 font-semibold text-white rounded-lg transition ${
-                            loading ? "bg-gray-400 cursor-not-allowed" : "bg-red-600 hover:bg-red-700"
-                        }`}
-                    >
-                        {loading ? "Logging out..." : "Logout"}
-                    </button>
+                        <option value="">Select your role</option>
+                        <option value="student">Student</option>
+                        <option value="teacher">Teacher</option>
+                    </select>
                 </div>
-            </div>
+
+                <div className="mb-6">
+                    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="institution">
+                        School/College Name
+                    </label>
+                    <input
+                        type="text"
+                        id="institution"
+                        value={institution}
+                        onChange={(e) => setInstitution(e.target.value)}
+                        className="w-full px-3 py-2 border rounded-md"
+                        required
+                    />
+                </div>
+
+                <button
+                    type="submit"
+                    className="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 transition duration-300"
+                >
+                    Continue to Dashboard
+                </button>
+            </form>
         </div>
     );
 }

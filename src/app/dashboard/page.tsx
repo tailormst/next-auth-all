@@ -1,82 +1,62 @@
-"use client";
+"use client"
 
-import { useState, useEffect } from "react";
-import Link from "next/link";
+import { useState, useEffect } from "react"
+import Link from "next/link"
+import toast from "react-hot-toast"
 import { useRouter } from "next/navigation";
 import axios from "axios";
 
 interface Classroom {
-    id: string;
-    name: string;
+    id: string
+    name: string
 }
 
 interface Assignment {
-    id: string;
-    title: string;
-    dueDate: string;
-}
-
-interface User {
-    name: string;
-    role: "student" | "teacher";
-    institution: string;
+    id: string
+    title: string
+    dueDate: string
 }
 
 export default function Dashboard() {
-    const [user, setUser] = useState<User | null>(null);
-    const [classrooms, setClassrooms] = useState<Classroom[]>([]);
-    const [assignments, setAssignments] = useState<Assignment[]>([]);
-    const router = useRouter();
-
-    // ✅ Helper function to get auth token
-    const getAuthHeaders = () => {
-        const token = localStorage.getItem("token"); // Ensure token exists
-        return token ? { Authorization: `Bearer ${token}` } : {};
-    };
+    const [classrooms, setClassrooms] = useState<Classroom[]>([])
+    const [assignments, setAssignments] = useState<Assignment[]>([])
+    const router = useRouter()
 
     useEffect(() => {
-        const fetchUserData = async () => {
-            try {
-                const res = await axios.get("/api/users/me", { headers: getAuthHeaders() });
-                setUser(res.data.data);
-            } catch (error) {
-                console.error("Error fetching user data:", error);
-                router.push("/login");
+        setClassrooms([
+            { id: "1", name: "Math 101" },
+            { id: "2", name: "History 202" },
+        ])
+        setAssignments([
+            { id: "1", title: "Algebra Homework", dueDate: "2023-06-01" },
+            { id: "2", title: "History Essay", dueDate: "2023-06-05" },
+        ])
+    }, [])
+
+    const logout = async () => {
+        try {
+            await axios.get('/api/users/logout')
+            toast.success('Logout successful')
+            router.push('/login')
+        } catch (error) {
+            if (error instanceof Error) {
+                console.log(error.message);
+                toast.error(error.message)
+            } else {
+                toast.error("An unknown error occurred")
             }
-        };
-
-        const fetchClassrooms = async () => {
-            try {
-                const res = await axios.get("/api/users/classrooms", { headers: getAuthHeaders() });
-                setClassrooms(res.data);
-            } catch (err) {
-                console.error("Error fetching classrooms:", err);
-            }
-        };
-
-        const fetchAssignments = async () => {
-            try {
-                const res = await axios.get("/api/users/assignments", { headers: getAuthHeaders() });
-                setAssignments(res.data);
-            } catch (err) {
-                console.error("Error fetching assignments:", err);
-            }
-        };
-
-        fetchUserData();
-        fetchClassrooms();
-        fetchAssignments();
-    }, [router]);
-
-    if (!user) {
-        return <div>Loading...</div>;
+        }
     }
 
     return (
         <div className="min-h-screen bg-gray-100 p-8">
-            <h1 className="text-3xl font-bold mb-8">Welcome, {user.name}</h1>
-            <p className="mb-4">Role: {user.role} | Institution: {user.institution}</p>
-            
+            <div className="bg-gray-100 flex-row gap-10">
+                <h1 className="text-3xl font-bold mb-8">Dashboard</h1>
+                <button
+                    onClick={logout}
+                    className="bg-blue-500 mt-4 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                >Logout</button>
+            </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div className="bg-white p-6 rounded-lg shadow">
                     <h2 className="text-xl font-semibold mb-4">My Classrooms</h2>
@@ -89,19 +69,9 @@ export default function Dashboard() {
                             </li>
                         ))}
                     </ul>
-                    {user.role === "student" && (
-                        <button className="mt-4 bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition duration-300">
-                            Join New Classroom
-                        </button>
-                    )}
-                    {user.role === "teacher" && (
-                        <Link
-                            href="/create-classroom"
-                            className="mt-4 inline-block bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition duration-300"
-                        >
-                            Create New Classroom
-                        </Link>
-                    )}
+                    <button className="mt-4 bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition duration-300">
+                        <a href="https://classroom.google.com/u/0/">Join New Classroom</a>
+                    </button>
                 </div>
                 <div className="bg-white p-6 rounded-lg shadow">
                     <h2 className="text-xl font-semibold mb-4">Upcoming Assignments</h2>
@@ -115,6 +85,14 @@ export default function Dashboard() {
                     </ul>
                 </div>
             </div>
+            <div className="mt-8">
+                <Link
+                    href="/attendance"
+                    className="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600 transition duration-300"
+                >
+                    View Attendance
+                </Link>
+            </div>
         </div>
-    );
+    )
 }
