@@ -23,6 +23,12 @@ This project implements a fully authenticated system using Next.js with email ve
 - Axios (API Requests)
 - Google Sheets API (Attendance Tracking)
 
+
+## Deployement on Vercel
+
+- https://next-auth-all-side.vercel.app/
+
+
 ## Installation & Setup
 
 ### Clone the repository:
